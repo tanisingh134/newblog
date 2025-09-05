@@ -109,6 +109,13 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+}
+
 header h1 {
     margin: 0;
     font-size: 2.5rem;
@@ -182,7 +189,6 @@ nav a:hover {
     overflow-y: auto;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
-    z-index: 51;
 }
 
 body.dark-mode .sidebar {
@@ -248,8 +254,6 @@ main {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
-    margin-left: 240px; /* Offset for sidebar + space */
-    width: calc(100% - 240px); /* Center posts with space from sidebar */
 }
 
 article {
@@ -279,17 +283,16 @@ article img:hover {
     transform: scale(1.02);
 }
 
-/* Post Header */
-.post-header h2 {
-    font-size: 2.8rem !important;
-    margin: 0;
-}
-
 .post-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+}
+
+article .post-header h2 {
+    font-size: 2.8rem !important;
+    margin: 0;
 }
 
 .category-tag {
@@ -341,13 +344,7 @@ article img:hover {
 }
 
 .like-btn.liked {
-    animation: pop 0.3s forwards;
-}
-
-@keyframes pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+    transform: scale(1.2);
 }
 
 .post-content {
@@ -534,90 +531,448 @@ footer {
     box-sizing: border-box;
 }
 
-/* Responsive Design */
-/* Desktop-First Approach: Styles for large screens first, then override for smaller screens */
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: 1rem;
+}
 
-/* Media query for smaller screens, like tablets */
+.mobile-menu-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to right, #007bff, #00ff88);
+    z-index: 99;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.mobile-nav.active {
+    transform: translateY(-100%);
+}
+
+.mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.mobile-nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.75rem;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.mobile-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Design */
 @media (max-width: 1024px) {
-    /* Main content takes full width, no sidebar offset */
+    .sidebar {
+        transform: translateX(-200px);
+    }
     main {
         margin: 2rem auto;
-        padding: 0 1rem;
-        width: auto;
-    }
-    
-    /* Sidebar becomes static and takes full width */
-    .sidebar {
-        position: static;
-        width: 100%;
-        height: auto;
-        transform: none;
-        padding: 1.5rem 1rem;
-        box-shadow: none;
+        margin-left: 0;
     }
 }
 
-/* Media query for mobile phones */
 @media (max-width: 768px) {
+    /* Header improvements */
     header {
-        position: static; /* Header no longer sticky on mobile */
+        padding: 1rem 0;
     }
-
-    /* Stack header controls vertically */
+    
+    header h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    nav {
+        display: none;
+    }
+    
+    .mobile-nav {
+        display: block;
+    }
+    
     .header-controls {
         flex-direction: column;
         align-items: center;
         gap: 0.5rem;
+        margin-top: 0.5rem;
     }
-
+    
     #search-bar {
         width: 90%;
+        max-width: 300px;
+        font-size: 1rem;
+        padding: 0.6rem;
+        margin: 0.5rem 0;
+    }
+    
+    #dark-mode-toggle {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Sidebar improvements */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 250px;
+        height: 100vh;
+        z-index: 200;
+        transition: left 0.3s ease;
+        padding: 2rem 1rem;
+        overflow-y: auto;
+    }
+    
+    .sidebar.open {
+        left: 0;
+    }
+    
+    .sidebar h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .sidebar a {
+        padding: 0.75rem;
         font-size: 1rem;
     }
     
-    /* Stack nav links vertically */
-    nav ul {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        overflow-x: hidden; /* Hide horizontal overflow */
+    /* Main content adjustments */
+    main {
+        margin: 1rem auto;
+        padding: 0 1rem;
     }
-
-    /* Adjust article and post header styles */
+    
     article {
-        padding: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
     }
+    
+    article .post-header h2 {
+        font-size: 2rem !important;
+        line-height: 1.2;
+    }
+    
     .post-header {
         flex-direction: column;
         align-items: flex-start;
-    }
-    .post-header h2 {
-        font-size: 2rem !important; /* Smaller font for titles */
-    }
-    .read-time, .likes, .like-btn, .category-tag {
-        margin: 0.5rem 0 0 0;
-    }
-    
-    /* Newsletter form stacks vertically */
-    .newsletter form {
-        flex-direction: column;
-        align-items: center;
         gap: 0.5rem;
     }
-    .newsletter input {
-        width: 90%;
+    
+    .category-tag,
+    .read-time,
+    .likes {
+        margin: 0.25rem 0.5rem 0.25rem 0;
+        font-size: 0.75rem;
+    }
+    
+    .like-btn {
+        margin: 0.25rem 0;
+        padding: 0.3rem 0.6rem;
+    }
+    
+    /* Image responsiveness */
+    article img {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    /* Social share improvements */
+    .social-share {
+        text-align: center;
+    }
+    
+    .social-share a {
+        display: inline-block;
+        margin: 0.5rem;
+        font-size: 1.5rem;
+    }
+    
+    /* Comments section */
+    .comment-form input,
+    .comment-form textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    /* Back to top button */
+    #back-to-top {
+        bottom: 20px;
+        right: 20px;
+        padding: 12px;
+        font-size: 16px;
     }
 }
 
 @media (max-width: 480px) {
+    /* Header for very small screens */
     header h1 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
+    
+    .mobile-nav ul {
+        grid-template-columns: 1fr;
+    }
+    
+    .mobile-nav a {
+        padding: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    /* Article improvements */
+    article {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    article .post-header h2 {
+        font-size: 1.6rem !important;
+        line-height: 1.3;
+    }
+    
+    .post-date {
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+    }
+    
+    .excerpt,
+    .ai-summary {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .read-more-btn {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+    
+    /* Main content */
     main {
         padding: 0 0.5rem;
     }
-    nav a {
-        font-size: 0.8rem;
-        padding: 0.2rem 0.6rem;
+    
+    /* Search bar */
+    #search-bar {
+        width: 100%;
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 0.75rem;
+    }
+    
+    /* Newsletter */
+    .newsletter form {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .newsletter input {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .newsletter button {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+    
+    /* Footer */
+    footer {
+        padding: 1.5rem 1rem;
+    }
+    
+    /* Sidebar for mobile */
+    .sidebar {
+        width: 100%;
+        left: -100%;
+    }
+    
+    .sidebar.open {
+        left: 0;
+    }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .mobile-nav ul {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    article .post-header h2 {
+        font-size: 1.8rem !important;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    article img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .like-btn,
+    .read-more-btn,
+    .comment-form button,
+    .newsletter button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    nav a,
+    .sidebar a,
+    .mobile-nav a {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #back-to-top {
+        min-height: 50px;
+        min-width: 50px;
+    }
+    
+    .mobile-menu-toggle {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Additional mobile optimizations */
+@media (max-width: 768px) {
+    /* Improve text readability */
+    body {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+    
+    /* Better spacing for touch targets */
+    .post-header {
+        margin-bottom: 1rem;
+    }
+    
+    .post-content {
+        margin-top: 1.5rem;
+    }
+    
+    /* Improve button spacing */
+    .like-btn {
+        margin-top: 0.5rem;
+    }
+    
+    /* Better form styling */
+    .comment-form {
+        margin-top: 1.5rem;
+    }
+    
+    .comment-form input,
+    .comment-form textarea {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        transition: border-color 0.3s;
+    }
+    
+    .comment-form input:focus,
+    .comment-form textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+    
+    /* Improve social share buttons */
+    .social-share h3 {
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    /* Better related posts styling */
+    .related-posts h3 {
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .related-posts li {
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+        background: rgba(0, 123, 255, 0.05);
+        border-radius: 4px;
+    }
+    
+    /* Improve comments section */
+    .comments-section h3 {
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .comments-section ul {
+        margin-bottom: 1.5rem;
+    }
+    
+    .comments-section li {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+        border-left: 3px solid #007bff;
+    }
+}
+
+/* Dark mode mobile improvements */
+@media (max-width: 768px) {
+    body.dark-mode .comments-section li {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    body.dark-mode .related-posts li {
+        background: rgba(0, 123, 255, 0.1);
+    }
+    
+    body.dark-mode .comment-form input:focus,
+    body.dark-mode .comment-form textarea:focus {
+        border-color: #00ff88;
+        box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
     }
 }
