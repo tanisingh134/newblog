@@ -1,8 +1,78 @@
 document.addEventListener('DOMContentLoaded', () => {
     const articles = document.querySelectorAll('article');
 
+    // Mobile menu toggle functionality
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    const sidebar = document.querySelector('.sidebar');
+
+    mobileMenuToggle.addEventListener('click', () => {
+        mobileNav.classList.toggle('active');
+        const icon = mobileMenuToggle.querySelector('i');
+        if (mobileNav.classList.contains('active')) {
+            icon.className = 'fas fa-times';
+        } else {
+            icon.className = 'fas fa-bars';
+        }
+    });
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('.mobile-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            const icon = mobileMenuToggle.querySelector('i');
+            icon.className = 'fas fa-bars';
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!mobileNav.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+            mobileNav.classList.remove('active');
+            const icon = mobileMenuToggle.querySelector('i');
+            icon.className = 'fas fa-bars';
+        }
+    });
+
+    // Sidebar toggle for mobile
+    const sidebarToggle = document.createElement('button');
+    sidebarToggle.innerHTML = '<i class="fas fa-filter"></i>';
+    sidebarToggle.className = 'sidebar-toggle';
+    sidebarToggle.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 10px;
+        z-index: 150;
+        background: linear-gradient(to right, #6a11cb, #2575fc);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    `;
+    document.body.appendChild(sidebarToggle);
+
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+    });
+
+    // Show sidebar toggle on mobile
+    const checkScreenSize = () => {
+        if (window.innerWidth <= 768) {
+            sidebarToggle.style.display = 'block';
+        } else {
+            sidebarToggle.style.display = 'none';
+            sidebar.classList.remove('open');
+        }
+    };
+
+    window.addEventListener('resize', checkScreenSize);
+    checkScreenSize();
+
     // 1. Navigation smooth scrolling with category reset
-    document.querySelectorAll('nav a').forEach(anchor => {
+    document.querySelectorAll('nav a, .mobile-nav a').forEach(anchor => {
         anchor.addEventListener('click', (e) => {
             e.preventDefault();
             // Reset category filter to show all posts
